@@ -26,12 +26,14 @@
                 x:Name="ContentPresenter"                    
                 Margin="{TemplateBinding Padding}"
                 Clip="{TemplateBinding ContentClip}"
-                Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}">                    
+                Content="{TemplateBinding ContentControl.Content}" 
+                ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" 
+                ContentTemplateSelector="{TemplateBinding ContentControl.ContentTemplateSelector}" 
+                ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}">                    
             </ContentPresenter>
         </Grid>
     </ControlTemplate>
     <Style TargetType="{x:Type wpf:Card}">
-        <Setter Property="TextOptions.TextFormattingMode" Value="Display" />        
         <Setter Property="Template" Value="{StaticResource CardTemplate}" />
         <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
         <Setter Property="VerticalAlignment" Value="Top" />

@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:MaterialDesignThemes.Wpf"
     xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters"
-    xmlns:controlzEx="clr-namespace:ControlzEx">
+    xmlns:controlzEx="clr-namespace:ControlzEx"
+    xmlns:transitions="clr-namespace:MaterialDesignThemes.Wpf.Transitions">
 
 	<ResourceDictionary.MergedDictionaries>
 		<!--	we only bring in the dictionaries for controls which were "invented"
@@ -15,22 +16,24 @@
 				in your App.xaml
 		-->
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Chip.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Clock.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RatingBar.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TimePicker.xaml" />
+	    <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TimePicker.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.SmartHint.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 	
 	<!-- set up default styles for our custom Material Design in XAML Toolkit controls -->
 	<Style TargetType="{x:Type local:Clock}" BasedOn="{StaticResource MaterialDesignClock}" />
-    <Style TargetType="{x:Type local:PopupBox}" BasedOn="{StaticResource MaterialDesignPopupBox}" />
+    	<Style TargetType="{x:Type local:PopupBox}" BasedOn="{StaticResource MaterialDesignPopupBox}" />
 	<Style TargetType="{x:Type local:TimePicker}" BasedOn="{StaticResource MaterialDesignTimePicker}" />
 		
 	<converters:BrushToRadialGradientBrushConverter x:Key="BrushToRadialGradientBrushConverter" />
     <converters:DrawerOffsetConverter x:Key="DrawerOffsetConverter" />
-    
+
     <Style TargetType="{x:Type local:Ripple}">
         <Setter Property="RecognizesAccessKey" Value="True" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -38,7 +41,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="ClipToBounds" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:RippleAssist.ClipToBounds)}" />        
-        <Setter Property="Feedback" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+        <Setter Property="Feedback" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:RippleAssist.Feedback)}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Ripple}">
@@ -50,7 +53,7 @@
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="ScaleTransform">
                                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="1">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="1">
                                                     <EasingDoubleKeyFrame.EasingFunction>
                                                         <SineEase EasingMode="EaseIn" />
                                                     </EasingDoubleKeyFrame.EasingFunction>
@@ -58,7 +61,7 @@
                                             </DoubleAnimationUsingKeyFrames>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform">
                                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="1">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="1">
                                                     <EasingDoubleKeyFrame.EasingFunction>
                                                         <SineEase EasingMode="EaseIn" />
                                                     </EasingDoubleKeyFrame.EasingFunction>
@@ -67,7 +70,6 @@
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ClickEllipse">
                                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                                 <EasingDoubleKeyFrame KeyTime="0:0:0.05" Value=".26"/>
-                                                <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value=".26"/>
                                             </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
@@ -92,12 +94,35 @@
                                             </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
-                                </VisualStateGroup.Transitions>
+                                    <VisualTransition From="MousePressed" To="Normal">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="ScaleTransform">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.30" Value="1" x:Name="MousePressedToNormalScaleXKeyFrame"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.50" Value="1"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.50" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.30" Value="1" x:Name="MousePressedToNormalScaleYKeyFrame"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.50" Value="1"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.50" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ClickEllipse">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.05" Value=".26"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.30" Value=".26"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.50" Value="0">
+                                                    <EasingDoubleKeyFrame.EasingFunction>
+                                                        <SineEase EasingMode="EaseOut" />
+                                                    </EasingDoubleKeyFrame.EasingFunction>
+                                                </EasingDoubleKeyFrame>
+                                          </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                      </VisualTransition>
+                                  </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal">
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ClickEllipse" To="0" Duration="0:0:0.6"/>
-                                        <DoubleAnimation Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="ScaleTransform" To="1" Duration="0:0:0.6"/>
-                                        <DoubleAnimation Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform" To="1" Duration="0:0:0.6"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="ScaleTransform" To="0"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform" To="0"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ClickEllipse" To="0"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="MousePressed">
@@ -116,6 +141,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+
                         <Canvas IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Ellipse x:Name="ClickEllipse" Fill="{TemplateBinding Feedback}" Opacity="0" 
                                      Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RippleSize}" 
@@ -370,11 +396,12 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="{x:Type local:ColorZone}">
         <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
         <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="IsTabStop" Value="False" />        
         <Setter Property="Template">
@@ -430,17 +457,19 @@
                 <Setter Property="Foreground" Value="{DynamicResource SecondaryAccentForegroundBrush}" />
             </Trigger>
             <Trigger Property="Mode" Value="Light">
-                <Setter Property="Background" Value="#FFfafafa" />
-                <Setter Property="Foreground" Value="#DD000000" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignLightBackground}" />
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignLightForeground}" />
             </Trigger>
             <Trigger Property="Mode" Value="Dark">
-                <Setter Property="Background" Value="#FF37474f" />
-                <Setter Property="Foreground" Value="#DDFFFFFF" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignDarkBackground}" />
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type local:DialogHost}">
+        <Setter Property="DialogMargin" Value="22" />
+        <Setter Property="local:ShadowAssist.ShadowDepth" Value="Depth5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:DialogHost">
@@ -453,7 +482,7 @@
                                             <BooleanAnimationUsingKeyFrames Storyboard.TargetName="PART_Popup" Storyboard.TargetProperty="IsOpen">
                                                 <DiscreteBooleanKeyFrame Value="True" KeyTime="0" />
                                             </BooleanAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentGrid" Storyboard.TargetProperty="Opacity">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PART_ContentCoverGrid" Storyboard.TargetProperty="Opacity">
                                                 <EasingDoubleKeyFrame Value="0" KeyTime="0" />
                                                 <EasingDoubleKeyFrame Value="0.56" KeyTime="0:0:0.3">
                                                     <EasingDoubleKeyFrame.EasingFunction>
@@ -493,7 +522,7 @@
                                                 <DiscreteBooleanKeyFrame Value="True" KeyTime="0:0:0" />
                                                 <DiscreteBooleanKeyFrame Value="True" KeyTime="0:0:0.3" />
                                             </BooleanAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentGrid" Storyboard.TargetProperty="Opacity">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PART_ContentCoverGrid" Storyboard.TargetProperty="Opacity">
                                                 <EasingDoubleKeyFrame Value="0.56" KeyTime="0" />
                                                 <EasingDoubleKeyFrame Value="0" KeyTime="0:0:0.3">
                                                     <EasingDoubleKeyFrame.EasingFunction>
@@ -536,7 +565,7 @@
                                         <BooleanAnimationUsingKeyFrames Storyboard.TargetName="PART_Popup" Storyboard.TargetProperty="IsOpen">
                                             <DiscreteBooleanKeyFrame Value="True" KeyTime="0" />
                                         </BooleanAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="ContentGrid" Storyboard.TargetProperty="Opacity"
+                                        <DoubleAnimation Storyboard.TargetName="PART_ContentCoverGrid" Storyboard.TargetProperty="Opacity"
                                                          Duration="0"
                                                          To=".56" />
                                         <DoubleAnimation Storyboard.TargetName="PART_PopupContentElement" Storyboard.TargetProperty="Opacity"
@@ -561,7 +590,7 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <controlzEx:PopupEx IsOpen="False"
-                                          PlacementTarget="{Binding ElementName=DialogHostRoot, Mode=OneWay}"
+                                          PlacementTarget="{Binding ElementName=DialogHostRoot, Mode=OneWay}"                                            
                                           StaysOpen="True"
                                           AllowsTransparency="True"
                                           PopupAnimation="None"
@@ -575,8 +604,8 @@
                                 </ResourceDictionary>
                             </controlzEx:PopupEx.Resources>
                             <local:Card x:Name="PART_PopupContentElement" 
-                                        Margin="22"
-                                        local:ShadowAssist.ShadowDepth="Depth5"
+                                        Margin="{TemplateBinding DialogMargin}"
+                                        local:ShadowAssist.ShadowDepth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:ShadowAssist.ShadowDepth)}"
                                         UniformCornerRadius="4"
                                         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                                         TextElement.FontWeight="Regular"
@@ -585,6 +614,7 @@
                                         TextOptions.TextRenderingMode="Auto"
                                         Foreground="{DynamicResource MaterialDesignBody}"
                                         FontFamily="{StaticResource MaterialDesignFont}"
+                                        Focusable="False"
                                         IsTabStop="False"
                                         Opacity="0"
                                         RenderTransformOrigin=".5,.5"
@@ -606,17 +636,21 @@
                                     x:Name="ContentPresenter" Opacity="1"                    
                                     Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" />
                         </AdornerDecorator>
-                        <Grid x:Name="ContentGrid" Background="Black" Opacity="0" IsHitTestVisible="False" Focusable="False" />
+                        <Grid x:Name="PART_ContentCoverGrid" Background="{x:Null}" Opacity="0" IsHitTestVisible="False" Focusable="False" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsOpen" Value="True">
                             <Setter TargetName="ContentPresenter" Property="IsEnabled" Value="False" />
+                            <Setter TargetName="PART_ContentCoverGrid" Property="Background" Value="Black" />
+                            <Setter TargetName="PART_ContentCoverGrid" Property="IsHitTestVisible" Value="True" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
+    <SolidColorBrush x:Key="BlackBackground" Color="Black" />
 
     <Style TargetType="{x:Type local:DrawerHost}">
         <Setter Property="local:ShadowAssist.ShadowDepth" Value="Depth3" />
@@ -645,6 +679,10 @@
                                                     </EasingDoubleKeyFrame.EasingFunction>
                                                 </EasingDoubleKeyFrame>
                                             </DoubleAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ContentCover" 
+                                                                           Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame Value="{StaticResource BlackBackground}" KeyTime="0" />
+                                            </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
                                     <VisualTransition From="AnyOpen" To="AllClosed">
@@ -670,6 +708,10 @@
                                         <BooleanAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="IsEnabled">
                                             <DiscreteBooleanKeyFrame Value="False" KeyTime="0" />
                                         </BooleanAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ContentCover" 
+                                                                       Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame Value="{StaticResource BlackBackground}" KeyTime="0" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="AllClosed">
@@ -733,7 +775,7 @@
                                     x:Name="ContentPresenter" Opacity="1"                    
                                     Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" ContentStringFormat="{TemplateBinding ContentStringFormat}" />
                         </AdornerDecorator>
-                        <Grid x:Name="PART_ContentCover" Background="Black" Opacity="0" IsHitTestVisible="False" Focusable="False" />
+                        <Grid x:Name="PART_ContentCover" Background="{x:Null}" Opacity="0" IsHitTestVisible="False" Focusable="False" />
                         <Grid HorizontalAlignment="Left" VerticalAlignment="Stretch">
                             <Grid.RenderTransform>
                                 <TranslateTransform x:Name="LeftDrawerTranslateTransform"
@@ -764,13 +806,14 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="FlowDirection" Value="LeftToRight" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PackIcon}">
                     <Border Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Viewbox>
+                        <Viewbox FlowDirection="{TemplateBinding FlowDirection}">
                             <Canvas Width="24" Height="24">
                                 <Path Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"                                   
                                       Fill="{TemplateBinding Foreground}" />
@@ -781,5 +824,81 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type transitions:Transitioner}">
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type transitions:Transitioner}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ItemsPresenter x:Name="ItemsPresenter" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="SelectedIndex" Value="-1">
+                            <Setter TargetName="ItemsPresenter" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type transitions:TransitioningContentBase}">
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type transitions:TransitioningContentBase}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            x:Name="Border">
+                        <ContentPresenter 
+                                x:Name="ContentPresenter"                    
+                                Margin="{TemplateBinding Padding}"                            
+                                Content="{TemplateBinding ContentControl.Content}" 
+                                ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" 
+                                ContentTemplateSelector="{TemplateBinding ContentControl.ContentTemplateSelector}" 
+                                ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                RenderTransformOrigin=".5,.5">
+                            <ContentPresenter.RenderTransform>
+                                <TransformGroup>
+                                    <MatrixTransform x:Name="PART_MatrixTransform" />
+                                    <RotateTransform x:Name="PART_RotateTransform" Angle="0" />
+                                    <ScaleTransform  x:Name="PART_ScaleTransform" ScaleX="1" ScaleY="1" />
+                                    <SkewTransform x:Name="PART_SkewTransform" AngleX="0" AngleY="0" />
+                                    <TranslateTransform x:Name="PART_TranslateTransform" X="0" Y="0" />
+                                </TransformGroup>
+                            </ContentPresenter.RenderTransform>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type transitions:TransitioningContent}" BasedOn="{StaticResource {x:Type transitions:TransitioningContentBase}}" />
+
+    <Style TargetType="{x:Type transitions:TransitionerSlide}" BasedOn="{StaticResource {x:Type transitions:TransitioningContentBase}}">
+        <Setter Property="RenderTransformOrigin" Value=".5,.5" />
+        <Setter Property="IsEnabled" Value="False" />
+        <Setter Property="Visibility" Value="Hidden" />
+        <Style.Triggers>
+            <Trigger Property="State" Value="Current">
+                <Setter Property="Visibility" Value="Visible" />
+                <Setter Property="IsEnabled" Value="True" />
+            </Trigger>
+            <Trigger Property="State" Value="Previous">
+                <Setter Property="Visibility" Value="Visible" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 
 </ResourceDictionary>
